@@ -23,6 +23,7 @@ O **OdontoPRO** é um sistema web completo desenvolvido para clínicas odontoló
 ## 🚀 Tecnologias Utilizadas
 
 ### Frontend
+
 - **Next.js 14** - Framework React com App Router
 - **TypeScript** - Tipagem estática para JavaScript
 - **Tailwind CSS** - Framework de estilização utilitário
@@ -30,6 +31,7 @@ O **OdontoPRO** é um sistema web completo desenvolvido para clínicas odontoló
 - **Lucide React** - Ícones SVG otimizados
 
 ### Ferramentas de Desenvolvimento
+
 - **ESLint** - Linting e padronização de código
 - **PostCSS** - Processamento de CSS
 - **Git** - Controle de versão
@@ -37,19 +39,22 @@ O **OdontoPRO** é um sistema web completo desenvolvido para clínicas odontoló
 ## 📦 Instalação e Configuração
 
 ### Pré-requisitos
-- Node.js 18+ 
+
+- Node.js 18+
 - npm ou yarn
 - Git
 
 ### Passo a passo
 
 1. **Clone o repositório**
+
 ```bash
 git clone https://github.com/Valdeilson-lima/OdontoPro.git
 cd OdontoPro
 ```
 
 2. **Instale as dependências**
+
 ```bash
 npm install
 # ou
@@ -57,11 +62,13 @@ yarn install
 ```
 
 3. **Configure as variáveis de ambiente**
+
 ```bash
 cp .env.example .env.local
 ```
 
 4. **Execute o servidor de desenvolvimento**
+
 ```bash
 npm run dev
 # ou
@@ -69,6 +76,7 @@ yarn dev
 ```
 
 5. **Abra no navegador**
+
 ```
 http://localhost:3000
 ```
@@ -104,16 +112,20 @@ odontopro/
 O projeto utiliza um design system consistente baseado em:
 
 ### Cores Principais
+
 - **Primary**: Emerald (`#10b981`)
 - **Background**: White (`#ffffff`)
 - **Text**: Zinc (`#18181b`, `#71717a`)
 
 ### Tipografia
+
 - **Fonte Principal**: Inter (via next/font)
 - **Tamanhos**: Responsivos com classes Tailwind
 
 ### Componentes
+
 Todos os componentes UI são baseados no **Shadcn/ui**, garantindo:
+
 - Acessibilidade (a11y)
 - Consistência visual
 - Fácil customização
@@ -122,11 +134,13 @@ Todos os componentes UI são baseados no **Shadcn/ui**, garantindo:
 ## 📱 Responsividade
 
 O sistema é totalmente responsivo com breakpoints:
+
 - **Mobile**: < 768px
-- **Tablet**: 768px - 1024px  
+- **Tablet**: 768px - 1024px
 - **Desktop**: > 1024px
 
 ### Features Mobile
+
 - Menu hambúrguer com Sheet lateral
 - Navegação touch-friendly
 - Imagens otimizadas
@@ -135,12 +149,14 @@ O sistema é totalmente responsivo com breakpoints:
 ## 🚀 Deploy
 
 ### Vercel (Recomendado)
+
 ```bash
 npm i -g vercel
 vercel
 ```
 
 ### Docker
+
 ```bash
 docker build -t odontopro .
 docker run -p 3000:3000 odontopro
@@ -184,6 +200,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 ## 👨‍💻 Autor
 
 **Valdeilson Lima**
+
 - GitHub: [@Valdeilson-lima](https://github.com/Valdeilson-lima)
 - LinkedIn: [Valdeilson Lima](https://linkedin.com/in/valdeilson-lima)
 

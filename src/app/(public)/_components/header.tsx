@@ -15,7 +15,7 @@ import { Menu, User, Phone, LogIn, LogInIcon } from "lucide-react";
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const session = true; // Replace with actual session logic
+  const session = false // Replace with actual session logic
 
   const navItems = [
     { href: "profissionais", title: "Profissionais", icon: User },
@@ -42,15 +42,15 @@ export function Header() {
       {session ? (
         <Link
           href="/dashboard"
-          className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg"
+          className="text-base  flex items-center gap-2"
         >
           <LogInIcon className="w-4 h-4" />
           Acessar Clinica
         </Link>
       ) : (
         <Button
-          className="bg-emerald-600 hover:bg-emerald-700 text-white"
           asChild
+          className="bg-black hover:bg-gray-800 text-white"
         >
           <Link href="login" className="flex items-center gap-2">
             <LogInIcon className="w-4 h-4" />
