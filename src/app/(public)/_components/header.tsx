@@ -5,22 +5,26 @@ import {
   Sheet,
   SheetContent,
   SheetDescription,
-  SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu, User, Phone, LogIn, LogInIcon } from "lucide-react";
+import { Menu, User, Phone, LogInIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { handleRegister } from "../_actions/login";
 
 export function Header() {
+  const { data: session, status } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const session = false // Replace with actual session logic
 
   const navItems = [
     { href: "profissionais", title: "Profissionais", icon: User },
     { href: "contato", title: "Contato", icon: Phone },
   ];
+
+  async function handleLogin() {
+    await handleRegister("github");
+  }
 
   const NavLinks = () => (
     <>
@@ -39,23 +43,25 @@ export function Header() {
           </Link>
         </Button>
       ))}
-      {session ? (
+      {status === "loading" ? (
+        <div className="text-base flex items-center gap-2">
+          <LogInIcon className="w-4 h-4 animate-spin" />
+        </div>
+      ) : session ? (
         <Link
           href="/dashboard"
-          className="text-base  flex items-center gap-2"
+          className="text-base  flex items-center gap-2 bg-black hover:bg-gray-800 text-white px-3 py-2 rounded-md"
         >
           <LogInIcon className="w-4 h-4" />
           Acessar Clinica
         </Link>
       ) : (
         <Button
-          asChild
           className="bg-black hover:bg-gray-800 text-white"
+          onClick={handleLogin}
         >
-          <Link href="login" className="flex items-center gap-2">
-            <LogInIcon className="w-4 h-4" />
-            Portal da Clinica
-          </Link>
+          <LogInIcon className="w-4 h-4" />
+          Portal da Clinica
         </Button>
       )}
     </>
@@ -80,20 +86,18 @@ export function Header() {
       {session ? (
         <Link
           href="/dashboard"
-          className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 rounded-lg transition-colors group"
+          className="text-base  flex items-center gap-2 bg-black hover:bg-gray-800 text-white px-3 py-2 rounded-md"
         >
-            <LogInIcon className="w-5 h-5 text-emerald-500 group-hover:scale-110 transition-transform" />
+          <LogInIcon className="w-5 h-5 text-emerald-500 group-hover:scale-110 transition-transform" />
           Acessar Clinica
         </Link>
       ) : (
         <Button
-          className="bg-emerald-600 hover:bg-emerald-700 text-white"
-          asChild
+          className="bg-black hover:bg-gray-800 text-white"
+          onClick={handleLogin}
         >
-          <Link href="login" className="flex items-center gap-2">
-            <LogInIcon className="w-4 h-4" />
-            Portal da Clinica
-          </Link>
+          <LogInIcon className="w-4 h-4" />
+          Portal da Clinica
         </Button>
       )}
     </>

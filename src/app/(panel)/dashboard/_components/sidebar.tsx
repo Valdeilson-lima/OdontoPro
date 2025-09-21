@@ -34,7 +34,6 @@ import logoImg from "../../../../../public/logo-odonto.png";
 export function SidebarDashboard({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  console.log(pathname);
 
   return (
     <div className="flex min-h-screen w-full">
@@ -161,7 +160,7 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }) {
           <Sheet>
             <div className="flex items-center gap-4">
               <SheetTrigger asChild>
-                <Button variant="outline" className="md:hidden">
+                <Button variant="outline" className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
                   <List className="w-5 h-5" />
                 </Button>
               </SheetTrigger>
