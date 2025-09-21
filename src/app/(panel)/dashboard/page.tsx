@@ -1,7 +1,10 @@
 export default function Dashboard() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1 className="text-4xl font-bold">Welcome to the Dashboard</h1>
+    <main >
+      <h1>Welcome to the Dashboard</h1>
+      <div className="w-full h-[600px] bg-gray-500 mb-10"></div>
+      <div className="w-full h-[600px] bg-gray-800 mb-10"></div>
+      <div className="w-full h-[600px] bg-gray-900 mb-10"></div>
     </main>
   );
 }
