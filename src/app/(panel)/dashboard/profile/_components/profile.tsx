@@ -32,7 +32,9 @@ import {
 import Image from "next/image";
 import imgtest from "../../../../../../public/foto1.png";
 import { ArrowBigRight } from "lucide-react";
-import { Prisma } from "@prisma/client";
+import { updateProfile } from "../_actions/update-profile";
+import { toast } from "sonner";
+import { formatPhone, unformatPhone } from "@/utils/formatPhone";
 
 type UserWithSubscription = {
   id: string;
@@ -63,7 +65,6 @@ interface ProfileContentProps {
   user: UserWithSubscription;
 }
 
-
 export function ProfileContent({ user }: ProfileContentProps) {
   const [selectedTime, setSelectedTime] = useState<string[]>(user.times ?? []);
   const [isOpen, setIsOpen] = useState(false);
@@ -72,10 +73,8 @@ export function ProfileContent({ user }: ProfileContentProps) {
     address: user.address,
     phone: user.phone,
     status: user.status,
-    timezone: user.timeZone
+    timezone: user.timeZone,
   });
-
-
 
   function generateTimeSlots(): string[] {
     const hours: string[] = [];
@@ -122,11 +121,26 @@ export function ProfileContent({ user }: ProfileContentProps) {
 
   async function onSubmit(values: ProfileFormData) {
 
-    const profileData = {
-      ...values,
-      times: selectedTime,
-    };
-    console.log("values", profileData);
+    const unformattedPhone = unformatPhone(values.phone ||"");
+    
+    const response = await updateProfile({
+      name: values.name,
+      address: values.address,
+      phone: unformattedPhone,
+      status: values.status === "active" ? true : false,
+      timezone: values.timezone,
+      times: selectedTime || [],
+    });
+
+    if (response.error) {
+      toast.error(response.error, { closeButton: true });
+      return;
+    }
+
+    if (response.success) {
+      toast.success(response.success, { closeButton: true });
+      return;
+    }
   }
 
   return (
@@ -197,8 +211,15 @@ export function ProfileContent({ user }: ProfileContentProps) {
                       </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Digite o telefone da sua empresa"
                           {...field}
+                          type="tel"
+                          placeholder="(99) 99999-9999"
+                          maxLength={16}
+                          onChange={(e) => {
+                            const formattedPhone = formatPhone(e.target.value);
+                            field.onChange(formattedPhone);
+                          }}
+                          value={field.value || ""}
                         />
                       </FormControl>
                       <FormMessage className="text-red-500" />
@@ -216,8 +237,8 @@ export function ProfileContent({ user }: ProfileContentProps) {
                       </FormLabel>
                       <FormControl>
                         <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value ? "active" : "inactive"}
+                          value={field.value}
+                          onValueChange={(val) => field.onChange(val)}
                         >
                           <SelectTrigger className="w-full ">
                             <SelectValue placeholder="Selecione o status" />
@@ -227,13 +248,13 @@ export function ProfileContent({ user }: ProfileContentProps) {
                               value="active"
                               className="cursor-pointer hover:bg-gray-100"
                             >
-                              Ativo (clinica aberta)
+                              Ativo (Clinica Aberta)
                             </SelectItem>
                             <SelectItem
                               value="inactive"
                               className="cursor-pointer hover:bg-gray-100"
                             >
-                              Inativo (clinica fechada)
+                              Inativo (Clinica Fechada)
                             </SelectItem>
                           </SelectContent>
                         </Select>

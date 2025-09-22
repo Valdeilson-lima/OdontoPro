@@ -15,7 +15,7 @@ const profileSchema = z.object({
   name: z.string().min(2, {message: "O nome deve ter no mínimo 2 caracteres"}),
   address: z.string().optional().or(z.literal("")),
   phone: z.string().optional().or(z.literal("")),
-  status: z.string(),
+  status: z.enum(["active", "inactive"]),
   timezone: z.string().min(1, {message: "O fuso horário é obrigatório"}),
 })
 
