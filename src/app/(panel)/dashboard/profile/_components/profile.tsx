@@ -35,6 +35,8 @@ import { ArrowBigRight } from "lucide-react";
 import { updateProfile } from "../_actions/update-profile";
 import { toast } from "sonner";
 import { formatPhone, unformatPhone } from "@/utils/formatPhone";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type UserWithSubscription = {
   id: string;
@@ -66,8 +68,13 @@ interface ProfileContentProps {
 }
 
 export function ProfileContent({ user }: ProfileContentProps) {
+  const router = useRouter();
   const [selectedTime, setSelectedTime] = useState<string[]>(user.times ?? []);
   const [isOpen, setIsOpen] = useState(false);
+  const { update } = useSession();
+
+
+
   const form = userProfileForm({
     name: user.name,
     address: user.address,
@@ -141,6 +148,13 @@ export function ProfileContent({ user }: ProfileContentProps) {
       toast.success(response.success, { closeButton: true });
       return;
     }
+  }
+
+  async function handleSignOut() {
+    await signOut();
+    await update();
+    router.replace("/");
+
   }
 
   return (
@@ -366,6 +380,15 @@ export function ProfileContent({ user }: ProfileContentProps) {
           </Card>
         </form>
       </Form>
+      <div className="mt-4">
+        <Button
+          variant="destructive"
+          className="text-white bg-red-500 hover:bg-red-600 cursor-pointer font-semibold"
+          onClick={handleSignOut}
+        >
+          Sair da Conta
+        </Button>
+      </div>
     </div>
   );
 }
