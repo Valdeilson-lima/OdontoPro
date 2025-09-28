@@ -8,14 +8,14 @@ declare module "next-auth" {
 
 interface User {
   id: string;
-  name?: string;
-  email?: string;
+  name?: string | null;
+  email?: string | null;
   emailVerified?: null | string | boolean;
-  image?: string;
-  strip_customer_id?: string;
+  image?: string | null;
+  strip_customer_id?: string | null;
   times: string[];
-  address?: string;
-  phone?: string;
+  address?: string | null;
+  phone?: string | null;
   status: boolean;
   createdAt: string;
   updatedAt: string;

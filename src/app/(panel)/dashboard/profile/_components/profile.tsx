@@ -73,8 +73,6 @@ export function ProfileContent({ user }: ProfileContentProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { update } = useSession();
 
-
-
   const form = userProfileForm({
     name: user.name,
     address: user.address,
@@ -86,9 +84,9 @@ export function ProfileContent({ user }: ProfileContentProps) {
   function generateTimeSlots(): string[] {
     const hours: string[] = [];
     for (let i = 8; i <= 24; i++) {
-      for (let j = 0; j < 60; j += 30) {
+      for (let j = 0; j <= 1; j++) {
         const hour = i.toString().padStart(2, "0");
-        const minute = (j * 30).toString().padStart(2, "0");
+        const minute = j === 0 ? "00" : "30";
         hours.push(`${hour}:${minute}`);
       }
     }
@@ -127,9 +125,8 @@ export function ProfileContent({ user }: ProfileContentProps) {
   );
 
   async function onSubmit(values: ProfileFormData) {
+    const unformattedPhone = unformatPhone(values.phone || "");
 
-    const unformattedPhone = unformatPhone(values.phone ||"");
-    
     const response = await updateProfile({
       name: values.name,
       address: values.address,
@@ -154,7 +151,6 @@ export function ProfileContent({ user }: ProfileContentProps) {
     await signOut();
     await update();
     router.replace("/");
-
   }
 
   return (
