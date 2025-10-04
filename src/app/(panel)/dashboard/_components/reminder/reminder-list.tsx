@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -31,6 +32,7 @@ interface ReminderListProps {
 
 export function ReminderList({ reminders }: ReminderListProps) {
   const router = useRouter();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   async function handleDeleteReminder(reminderId: string) {
     const response = await deleteReminder({ reminderId });
@@ -48,7 +50,7 @@ export function ReminderList({ reminders }: ReminderListProps) {
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="font-bold text-xl">Lembretes</CardTitle>
 
-          <Dialog>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button
                 variant="ghost"
@@ -65,7 +67,9 @@ export function ReminderList({ reminders }: ReminderListProps) {
                  Criar um novo lembrete em bre
                 </DialogDescription>  
               </DialogHeader>
-              <ReminderContent />
+              <ReminderContent
+                closeDialog={() => setIsDialogOpen(false)}
+               />
             </DialogContent>
 
           </Dialog>
@@ -78,23 +82,23 @@ export function ReminderList({ reminders }: ReminderListProps) {
               Nenhum lembrete encontrado.
             </CardDescription>
           ) : (
-            <ul className="list-disc list-inside space-y-2">
+            <ul className="m-0 p-0">
               <ScrollArea className="h-[340px] w-full pr-0 overflow-y-auto lg:max-h-[100vh-15rem] flex-1">
                 {reminders.map((reminder) => (
                   <li
                     key={reminder.id}
-                    className="text-sm bg-yellow-200 p-2 rounded-md"
+                    className="text-sm bg-yellow-200 p-2 rounded-md flex items-center justify-between mb-4"
                   >
                     {reminder.description}
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-4 w-4 p-0 bg-red-500 hover:bg-red-400 text-white cursor-pointer"
+                      className=" bg-red-500 hover:bg-red-400 text-white cursor-pointer"
                       onClick={() => {
                         handleDeleteReminder(reminder.id);
                       }}
                     >
-                      <Trash className="h-3 w-3" />
+                      <Trash className="h-4 w-4" />
                     </Button>
                   </li>
                 ))}
