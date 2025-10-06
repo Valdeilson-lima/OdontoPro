@@ -17,9 +17,8 @@ export async function GET(request: NextRequest) {
   try {
     // Converter a data recebida em um objeto Date
     const [year, month, day] = dateParam.split("-").map(Number);
-    const startOfDay = new Date(year, month - 1, day, 0, 0, 0);
-    const endOfDay = new Date(year, month - 1, day, 23, 59, 59);
-    // Buscar agendamentos do usuário na data especificada
+    const startOfDay = new Date(Date.UTC(year, month - 1, day, 0, 0, 0));
+    const endOfDay = new Date(Date.UTC(year, month - 1, day, 23, 59, 59));
 
     const user = await prisma.user.findFirst({
       where: {
@@ -65,13 +64,10 @@ export async function GET(request: NextRequest) {
 
     const blockedTimes = Array.from(blockedSlots);
 
-    console.log("Blocked Times:", blockedTimes);
-
     return NextResponse.json(blockedTimes);
 
 
   } catch (error) {
-    console.error("Error fetching appointments:", error);
     return NextResponse.json(
       { error: "Erro ao buscar agendamentos" },
       { status: 500 }

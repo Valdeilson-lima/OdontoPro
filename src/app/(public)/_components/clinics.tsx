@@ -3,18 +3,14 @@ import Image from "next/image";
 import fotoImg from "../../../../public/foto1.png";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { User } from "@/generated/prisma/wasm";
 
-export function Clinics() {
-  const clinics = [
-    { name: "Clínica Sorriso Feliz", location: "São Paulo, SP" },
-    { name: "Odonto Center", location: "Rio de Janeiro, RJ" },
-    { name: "Dental Plus", location: "Belo Horizonte, MG" },
-    { name: "Clínica Vida", location: "Brasília, DF" },
-    { name: "Clínica Sorriso Feliz", location: "São Paulo, SP" },
-    { name: "Odonto Center", location: "Rio de Janeiro, RJ" },
-    { name: "Dental Plus", location: "Belo Horizonte, MG" },
-    { name: "Clínica Vida", location: "Brasília, DF" },
-  ];
+interface ClinicPros {
+  clinics: User[];
+}
+
+export function Clinics({clinics}: ClinicPros) {
+  
 
   return (
     <section className="bg-gray-50 py-16">
@@ -26,13 +22,13 @@ export function Clinics() {
           {clinics.map((clinic, index) => (
             <Card
               key={index}
-              className="border-0 shadow-md hover:shadow-lg transition-shadow overflow-hidden"
+              className="border-0 shadow-md hover:shadow-lg transition-shadow overflow-hidden shadow-ld duration-75"
             >
               <CardContent className="p-0">
                 {/* Imagem no topo */}
                 <div className="relative h-48">
                   <Image
-                    src={fotoImg}
+                    src={clinic.image || fotoImg}
                     alt={`Foto da ${clinic.name}`}
                     fill
                     priority
@@ -47,12 +43,13 @@ export function Clinics() {
                       <h3 className="font-semibold">{clinic.name}</h3>
                       <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full"></div>
                     </div>
-                    <p className="text-sm text-gray-500">{clinic.location}</p>
+                    <p className="text-sm text-gray-500">{clinic.address ?? "Endereço não disponível"}</p>
                   </div>
 
                   <Link
-                    href="/agendar-horarios"
+                    href={`/clinic/${clinic.id}`}
                     className="w-full bg-emerald-500 hover:bg-emerald-600 duration-400 transform transition-colors text-white text-center py-2 px-4 rounded-md font-semibold text-sm md:text-base inline-flex items-center justify-center"
+                    target="_blank"
                   >
                     Agendar Horários
                     <ArrowRight className="w-4 h-4 ml-2" />
