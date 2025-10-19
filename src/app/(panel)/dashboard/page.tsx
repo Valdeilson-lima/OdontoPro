@@ -6,6 +6,10 @@ import { redirect } from "next/navigation";
 import { ButtonCopyLink } from "./_components/button-copy-link";
 import { Reminders } from "./_components/reminder/reminders";
 import { Appointments } from "./_components/appointments/appointments";
+import { DashboardMetrics } from "./_components/dashboard-metrics";
+import { getDashboardMetrics } from "./_date_acces/get-dashboard-metrics";
+
+export const runtime = "nodejs";
 
 export default async function Dashboard() {
   const session = await getSession();
@@ -16,8 +20,17 @@ export default async function Dashboard() {
 
   console.log(session.user.status);
 
+  const metrics = await getDashboardMetrics({ userId: session.user?.id! });
+
   return (
     <main>
+      <div className="mt-2 mb-4">
+        <DashboardMetrics
+          appointmentsCount={metrics.appointmentsCount}
+          activeRemindersCount={metrics.activeRemindersCount}
+          todayRevenue={metrics.todayRevenue}
+        />
+      </div>
       <div className="space-x-2 flex items-center justify-end">
         <Link href={`/clinic/${session.user?.id}`} target="_blank">
           <Button className="bg-green-600 hover:bg-green-700 text-white cursor-pointer flex-1 md:flex[0]">

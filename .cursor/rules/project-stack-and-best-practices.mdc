@@ -1,0 +1,142 @@
+---
+description: Project stack (Next 15, React 19, Prisma 6, NextAuth v5, Tailwind 4, React Query 5, Radix, Stripe, Zod/RHF) and version-specific best practices
+alwaysApply: false
+---
+
+## Project Stack: OdontoPro
+
+This document describes the current project stack and consolidates best practices specific to the versions in use.
+
+- **Framework**: Next.js 15.5.3 (App Router, Route Handlers, RSC)
+- **Language**: TypeScript ^5
+- **UI**: React 19.1.0, Tailwind CSS ^4, Radix UI (`@radix-ui/react-*`), Lucide Icons
+- **Forms/Validation**: React Hook Form ^7 + Zod ^4 (`@hookform/resolvers` ^5)
+- **State/Server Cache**: TanStack React Query ^5
+- **Auth**: NextAuth ^5.0.0-beta.29 + `@auth/prisma-adapter` ^2.10.0
+- **ORM/DB**: Prisma ^6.16.2 (`@prisma/client` ^6.16.2)
+- **Payments**: Stripe (`stripe` ^19, `@stripe/stripe-js` ^8)
+- **Dates**: date-fns ^4
+- **UX**: sonner ^2 (toasts)
+- **Lint/Build**: ESLint ^9 + `eslint-config-next` 15.5.3
+
+---
+
+## Recommendations by Area
+
+### Next.js 15 + React 19
+
+- **RSC by default**: components are Server Components; use `"use client"` only when needed (browser hooks, events, React contexts).
+- **Server Actions**: prefer server actions for simple mutations; validate input on the server (Zod) and return serializable state.
+- **`fetch` caching**: set `cache`, `revalidate` or `next: { tags }` explicitly to avoid unexpected caching. For dynamic data, use `cache: 'no-store'`.
+- **Prisma in routes**: force Node runtime when using Prisma in Route Handlers/RSC: `export const runtime = 'nodejs'`.
+- **Client boundary**: isolate client-only components (datepicker, toasts, clipboard) to reduce bundle size and avoid hydration warnings.
+
+### NextAuth v5 (beta)
+
+- **Types**: v5 ships its own types; avoid `@types/next-auth` when possible. Use module augmentation in `types/next-auth.d.ts` for custom fields.
+- **Server/Client usage**: in RSC prefer `auth()`/server helpers; in clients use `useSession()` and `signIn/signOut`.
+- **Security**: configure `AUTH_SECRET`/`NEXTAUTH_URL`. Restrict callbacks and Prisma selectors to return only what is necessary.
+- **Prisma adapter**: keep the adapter aligned with the schema; run `prisma migrate`/`prisma generate` after changes.
+
+### Prisma 6
+
+- **Client reuse**: create a single instance (typical `globalThis` pattern) to avoid excessive connections in dev/hot-reload.
+- **Runtime**: do not use Prisma on Edge; mark handlers that use Prisma with `runtime = 'nodejs'`.
+- **Selective fetching**: prefer minimal `select`/`include` to reduce payload and data leakage risk.
+- **Migrations**: keep migrations reviewed and descriptively named; avoid destructive changes without a migration plan.
+
+### React Query 5
+
+- **Stable keys**: use deterministic and granular `queryKey`; set `staleTime`/`gcTime` according to data SLA.
+- **Prefetch/Hydration**: for SSR/RSC + client, use `prefetchQuery` on the server and `<HydrationBoundary>` on the client.
+- **Mutations**: use `onMutate`/`onError`/`onSettled` for optimistic updates and selective invalidation.
+
+### RHF 7 + Zod 4
+
+- **Resolver**: `zodResolver(schema)` for end-to-end typing and consistent messages.
+- **Shared schemas**: reuse schemas between client/server; use `safeParse` on the server for safety.
+- **Accessibility**: wire Radix `Label` to `Input` via matching `id`/`htmlFor`.
+
+### Tailwind CSS 4
+
+- **v4 pipeline**: use the modern pipeline (`@tailwindcss/postcss`). Avoid legacy config patterns where possible.
+- **Class merging**: use `tailwind-merge` to resolve conflicts; combine with `class-variance-authority` for scalable variants.
+
+### Stripe
+
+- **Secrets on server**: use the `stripe` SDK (server) only in server handlers/actions. On the client use `loadStripe` from `@stripe/stripe-js`.
+- **Webhooks**: validate signature with `stripe.webhooks.constructEvent`; handle idempotency in mutations.
+
+### Radix UI
+
+- **A11y**: follow accessibility defaults (focus management, `asChild`, proper `Label`).
+- **Portals**: modals/overlays should use Radix portals to avoid stacking context issues.
+
+### date-fns 4
+
+- **Imports**: import specific functions from `date-fns` to enable tree-shaking.
+- **Timezones**: handle timezone/locale in formatting (e.g., `pt-BR`) when relevant.
+
+---
+
+## Reference snippets (generic)
+
+```ts
+// Route Handler using Prisma (guarantees Node.js runtime)
+export const runtime = "nodejs";
+```
+
+```ts
+// React Hook Form + Zod
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const schema = z.object({
+  name: z.string().min(1),
+  phone: z.string().min(8),
+});
+
+const form = useForm<z.infer<typeof schema>>({
+  resolver: zodResolver(schema),
+  mode: "onSubmit",
+});
+```
+
+```tsx
+// React Query: hydration
+// Server: prefetchQuery(...)
+// Client:
+<HydrationBoundary state={dehydrate(queryClient)}>
+  {/* client components */}
+</HydrationBoundary>
+```
+
+---
+
+## Compatibility notes and pitfalls
+
+- **NextAuth v5 (beta)**: check breaking changes before upgrading; prefer built-in types and keep augmentation in `types/next-auth.d.ts`.
+- **Prisma on Edge**: not supported; always use Node runtime.
+- **React 19**: client components must be explicitly marked with `"use client"`. Avoid React hooks in RSC.
+- **ESLint 9**: keep `eslint-config-next` rules up-to-date and fix warnings to avoid regressions.
+
+---
+
+## Recommended conventions
+
+- **Organization**: clearly separate `app/(public)` and `app/(panel)` (well-defined client/server boundaries).
+- **Data**: centralize access in `_data-access` modules and encapsulate Prisma selects.
+- **Actions**: organize server mutations in `_actions` with Zod validation.
+- **UI**: group primitive components and `ui/*` compositions, use `cva` for variants.
+
+---
+
+## Quick checklist
+
+- [ ] Handlers using Prisma export `runtime = 'nodejs'`
+- [ ] Client-only components use `"use client"`
+- [ ] Zod schemas shared between client/server
+- [ ] Stable React Query keys and selective invalidation
+- [ ] Stripe secrets only on the server and webhooks validated
+- [ ] NextAuth adapter in sync with Prisma schema
