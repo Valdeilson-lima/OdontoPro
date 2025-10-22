@@ -23,14 +23,19 @@ import { Service } from "@/generated/prisma";
 import { formatCurrency } from "@/utils/formatCurrence";
 import { deleteService } from "../_actions/delete-service";
 import { toast } from "sonner";
+import { ResultPermissionProps } from "@/utils/permissions/canPermission";
+import  Link  from "next/link";
 
 interface ServicesListProps {
   services: Service[];
+  permissions: ResultPermissionProps;
 }
 
-export function ServicesListt({ services }: ServicesListProps) {
+export function ServicesListt({ services, permissions }: ServicesListProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingService, setEditingService] = useState<Service | null>(null);
+
+  const serviceList =permissions.hasPermission ? services : services.slice(0, permissions.planId === "BASIC" ? 3 : 50);
 
   async function handleDelete(serviceId: string) {
     const result = await deleteService({ serviceId });
@@ -61,7 +66,8 @@ export function ServicesListt({ services }: ServicesListProps) {
             <CardTitle className="text-xl md:text-2xl font-semibold text-gray-800">
               Serviços
             </CardTitle>
-            <DialogTrigger asChild>
+           { permissions.hasPermission && (
+             <DialogTrigger asChild>
               <Button
                 variant="outline"
                 className=" bg-emerald-500 hover:bg-emerald-600 text-white cursor-pointer"
@@ -69,6 +75,19 @@ export function ServicesListt({ services }: ServicesListProps) {
                 <Plus className="h-5 w-5" />
               </Button>
             </DialogTrigger>
+           )}
+
+           {!permissions.hasPermission && (
+             <Link href="/dashboard/plans">
+               <Button
+                 variant="outline"
+                 className=" bg-emerald-500 hover:bg-emerald-600 text-white cursor-pointer"
+               >
+                 Limite de serviços atingido
+               </Button>
+             </Link>
+           )}
+           
             <DialogContent
               className="bg-white"
               onInteractOutside={(e) => {
@@ -105,7 +124,7 @@ export function ServicesListt({ services }: ServicesListProps) {
               <p className="text-gray-500">Nenhum serviço cadastrado.</p>
             ) : (
               <ul className="space-y-4">
-                {services.map((service) => (
+                {serviceList.map((service) => (
                   <li
                     key={service.id}
                     className="border p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow flex flex-col md:flex-row md:items-center md:justify-between"
