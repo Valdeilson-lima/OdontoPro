@@ -58,7 +58,7 @@ export async function createSubscription({ type }: CreateSubscriptionProps) {
           price:
             type === "BASIC"
               ? process.env.STRIPE_PLAN_BASIC
-              : process.env.STRIPE_PLAN_PRO,
+              : process.env.STRIPE_PLAN_PROFISSIONAL,
           quantity: 1,
         },
       ],

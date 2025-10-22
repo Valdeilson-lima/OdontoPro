@@ -12,6 +12,7 @@ import {
 import { subscriptionPlans } from "@/utils/plans";
 import { CheckCheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { createPortalCustomer } from "../_actions/create-portal-customer";
 
 interface SubscriptionDetailProps {
   subscription: Subscription;
@@ -21,7 +22,16 @@ export function SubscriptionDetail({ subscription }: SubscriptionDetailProps) {
   const plan = subscriptionPlans.find((plan) => plan.id === subscription.plan);
 
   async function handleManageSubscription() {
-    console.log("Gerenciar Assinatura");
+    const portal = await createPortalCustomer();
+
+    if (portal.error) {
+      toast.error(portal.error);
+      return;
+    }
+
+    if (portal.sessionId) {
+      window.location.href = portal.sessionId;
+    }
   }
 
   return (

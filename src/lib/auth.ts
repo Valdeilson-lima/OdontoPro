@@ -13,6 +13,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma) as Adapter,
   trustHost: true,
   providers: [githubProvider],
-  // Ensure a secret is provided. Auth.js checks `secret` or common env vars.
+  
   secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
 });

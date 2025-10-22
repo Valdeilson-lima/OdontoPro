@@ -15,7 +15,7 @@ import { Plan } from "@/generated/prisma/wasm";
  * @async
  * @function manageSubscription
  */
-export async function manageSubscription(
+export async function ManageSubscription(
   subscriptionId: string,
   customerId: string,
   createAction = false,
