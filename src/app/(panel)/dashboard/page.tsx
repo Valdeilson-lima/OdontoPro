@@ -8,6 +8,8 @@ import { Reminders } from "./_components/reminder/reminders";
 import { Appointments } from "./_components/appointments/appointments";
 import { DashboardMetrics } from "./_components/dashboard-metrics";
 import { getDashboardMetrics } from "./_date_acces/get-dashboard-metrics";
+import { checkSubscription } from "@/utils/permissions/checkSubscription";
+import { LabelSubscription } from "@/components/ui/labe-subscription";
 
 export const runtime = "nodejs";
 
@@ -18,7 +20,11 @@ export default async function Dashboard() {
     redirect("/");
   }
 
-  console.log(session.user.status);
+  const subscription = await checkSubscription(session.user?.id!);
+
+  // if (subscription.subscriptionStatus === "EXPIRED") {
+  //   redirect("/dashboard/plans");
+  // }
 
   const metrics = await getDashboardMetrics({ userId: session.user?.id! });
 
@@ -41,10 +47,28 @@ export default async function Dashboard() {
         <ButtonCopyLink userId={session.user?.id!} />
       </div>
 
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
-        <Appointments userId={session.user?.id!} />
-        <Reminders userId={session.user?.id!} />
-      </section>
+      {subscription?.subscriptionStatus === "EXPIRED" && (
+        <LabelSubscription expired={true} />
+      )}
+
+      {subscription?.subscriptionStatus === "TRIAL" && (
+        <div className="bg-green-500 text-white text-sm md:text-base px-3 py-3 mt-5 rounded-md">
+          <p className="font-semibold">
+            {subscription?.message}{" "}
+            <Link href="/dashboard/plans" className="underline font-semibold">
+              Escolha um plano
+            </Link>
+          </p>
+
+        </div>
+      )}
+
+      {subscription?.subscriptionStatus !== "EXPIRED" && (
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
+          <Appointments userId={session.user?.id!} />
+          <Reminders userId={session.user?.id!} />
+        </section>
+      )}
     </main>
   );
 }
