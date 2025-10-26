@@ -16,7 +16,7 @@ export function Hero() {
               rápida, fácil e simplificada. Agende sua consulta agora mesmo!
             </p>
             <Button className="bg-emerald-500 hover:bg-emerald-400 text-white w-fit px-6 py-2 rounded-md mt-3 font-semibold cursor-pointer">
-              Encontre um Profissional
+              Encontre uma clínica
             </Button>
           </article>
 

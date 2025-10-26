@@ -37,6 +37,7 @@ import { toast } from "sonner";
 import { formatPhone, unformatPhone } from "@/utils/formatPhone";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { AvatarProfile } from "./profile-avatar";
 
 type UserWithSubscription = {
   id: string;
@@ -162,15 +163,8 @@ export function ProfileContent({ user }: ProfileContentProps) {
               <CardTitle>Meu Perfil</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="flex justify-center">
-                <div className="relative h-40 w-40 rounded-full overflow-hidden border border-gray-300">
-                  <Image
-                    src={user.image ? user.image : imgtest}
-                    alt="User Profile"
-                    fill
-                    className="object-cover "
-                  />
-                </div>
+              <div className="flex  justify-center">
+                <AvatarProfile avatarUrl={user.image} userId={user.id} />
               </div>
               <div className="space-y-4">
                 <FormField

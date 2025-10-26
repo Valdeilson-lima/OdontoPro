@@ -22,10 +22,7 @@ export default async function Dashboard() {
 
   const subscription = await checkSubscription(session.user?.id!);
 
-  // if (subscription.subscriptionStatus === "EXPIRED") {
-  //   redirect("/dashboard/plans");
-  // }
-
+  
   const metrics = await getDashboardMetrics({ userId: session.user?.id! });
 
   return (

@@ -159,7 +159,7 @@ export function ClinicContent({ user }: ClinicContentProps) {
             <h1 className="text-2xl font-bold mt-4">{user.name}</h1>
             <div className="mt-2 text-gray-600 flex items-center gap-2">
               <MapPin className="inline-block w-5 h-5 text-emerald-500 mr-1" />
-              <span className="text-gray-600">{user.address}</span>
+              <span className="text-gray-600">{user.address || "Endereço não disponível"}</span>
             </div>
           </article>
         </div>

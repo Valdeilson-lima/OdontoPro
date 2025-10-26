@@ -6,6 +6,12 @@ export async function getClinics() {
       where: {
         status: true,
       },
+      include: {
+        subscription: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     return clinics;
