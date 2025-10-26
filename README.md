@@ -34,26 +34,92 @@ O **OdontoPRO** é um sistema web completo desenvolvido para clínicas odontoló
 
 - **ESLint** - Linting e padronização de código
 - **PostCSS** - Processamento de CSS
-- **Git** - Controle de versão
+# 🦷 OdontoPRO
 
-## 📦 Instalação e Configuração
+> Sistema web moderno para clínicas odontológicas
 
-### Pré-requisitos
+![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3-38bdf8?style=for-the-badge&logo=tailwind-css)
+
+Uma aplicação Next.js (App Router) com painel administrativo, agendamento de consultas, gestão de pacientes e integração com Stripe e Cloudinary.
+
+## Sumário
+
+- Sobre
+- Tecnologias
+- Requisitos
+- Configuração (.env)
+- Rodando localmente
+- Banco de dados (Prisma)
+- Integrações (Stripe, Cloudinary)
+- Deploy
+- Contribuição
+
+## 📋 Sobre o Projeto
+
+O **OdontoPRO** é um sistema web completo para clínicas odontológicas com foco em usabilidade, performance e extensibilidade.
+
+### Funcionalidades principais
+
+- Painel administrativo (gestão de serviços, profissionais e pacientes)
+- Agendamento de consultas
+- Autenticação via OAuth (GitHub no exemplo) e NextAuth
+- Integração com Stripe para planos e pagamentos
+- Upload de imagens via Cloudinary
+
+## 🚀 Tecnologias
+
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- Prisma (Postgres)
+- Stripe
+- Cloudinary
+
+## 🛠️ Requisitos
 
 - Node.js 18+
 - npm ou yarn
-- Git
+- Postgres (local ou remoto)
 
-### Passo a passo
+## ⚙️ Configuração de ambiente
 
-1. **Clone o repositório**
+Cópia do arquivo de exemplo:
 
 ```bash
-git clone https://github.com/Valdeilson-lima/OdontoPro.git
-cd OdontoPro
+cp .env.example .env.local
 ```
 
-2. **Instale as dependências**
+Preencha as variáveis no arquivo criado. Variáveis presentes (exemplos):
+
+- DATABASE_URL=postgresql://user:password@localhost:5432/odontopro
+- NEXT_PUBLIC_BASE_URL=http://localhost:3000
+- NEXTAUTH_URL=http://localhost:3000
+- NEXTAUTH_SECRET=replace_with_a_long_secret
+- AUTH_SECRET=replace_with_a_long_secret
+- AUTH_GITHUB_ID=your_github_client_id
+- AUTH_GITHUB_SECRET=your_github_client_secret
+- STRIPE_SECRET_KEY=sk_test_xxx
+- NEXT_PUBLIC_STRIPE_PUBLIC_KEY=pk_test_xxx
+- STRIPE_SUCCESS_URL=http://localhost:3000/dashboard/plans
+- STRIPE_PLAN_BASIC=price_basic_xxx
+- STRIPE_PLAN_PROFISSIONAL=price_professional_xxx
+- STRIPE_SECRET_WEBHOOK_KEY=whsec_xxx
+- CLOUDINARY_NAME=your_cloud_name
+- CLOUDINARY_API_KEY=your_cloudinary_api_key
+- CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+- VERCEL_URL=your-production-url.vercel.app
+- NEXTAUTH_URL_INTERNAL=http://localhost:3000
+
+Observações:
+
+- Nunca comite chaves reais. Use o `.env.example` apenas como referência.
+- Mantenha `NEXTAUTH_SECRET`/`AUTH_SECRET` com valores longos e aleatórios (ex: 32+ caracteres).
+
+## Rodando localmente
+
+1. Instale dependências:
 
 ```bash
 npm install
@@ -61,152 +127,90 @@ npm install
 yarn install
 ```
 
-3. **Configure as variáveis de ambiente**
+2. Configure as variáveis de ambiente (veja acima).
+
+3. Inicialize o banco (Prisma) e aplique migrations locais:
 
 ```bash
-cp .env.example .env.local
+npx prisma generate
+npx prisma migrate dev --name init
 ```
 
-4. **Execute o servidor de desenvolvimento**
+4. Rode a aplicação em modo desenvolvimento:
 
 ```bash
 npm run dev
-# ou
-yarn dev
 ```
 
-5. **Abra no navegador**
+Abra http://localhost:3000
 
-```
-http://localhost:3000
-```
+## Banco de dados (Prisma)
 
-## 🏗️ Estrutura do Projeto
-
-```
-odontopro/
-├── public/                 # Arquivos estáticos
-│   ├── logo-odonto.png    # Logo da clínica
-│   ├── doctor-hero.png    # Imagem hero
-│   └── ...
-├── src/
-│   ├── app/               # App Router do Next.js
-│   │   ├── (public)/      # Rotas públicas
-│   │   │   ├── page.tsx   # Landing page
-│   │   │   └── _components/
-│   │   │       └── header.tsx
-│   │   ├── (panel)/       # Painel administrativo
-│   │   │   └── dashboard/
-│   │   ├── globals.css    # Estilos globais
-│   │   └── layout.tsx     # Layout principal
-│   ├── components/        # Componentes reutilizáveis
-│   │   └── ui/           # Componentes UI (Shadcn)
-│   └── lib/              # Utilitários e configurações
-├── components.json        # Configuração Shadcn/ui
-├── tailwind.config.js     # Configuração Tailwind
-└── tsconfig.json         # Configuração TypeScript
-```
-
-## 🎨 Design System
-
-O projeto utiliza um design system consistente baseado em:
-
-### Cores Principais
-
-- **Primary**: Emerald (`#10b981`)
-- **Background**: White (`#ffffff`)
-- **Text**: Zinc (`#18181b`, `#71717a`)
-
-### Tipografia
-
-- **Fonte Principal**: Inter (via next/font)
-- **Tamanhos**: Responsivos com classes Tailwind
-
-### Componentes
-
-Todos os componentes UI são baseados no **Shadcn/ui**, garantindo:
-
-- Acessibilidade (a11y)
-- Consistência visual
-- Fácil customização
-- Performance otimizada
-
-## 📱 Responsividade
-
-O sistema é totalmente responsivo com breakpoints:
-
-- **Mobile**: < 768px
-- **Tablet**: 768px - 1024px
-- **Desktop**: > 1024px
-
-### Features Mobile
-
-- Menu hambúrguer com Sheet lateral
-- Navegação touch-friendly
-- Imagens otimizadas
-- Carregamento rápido
-
-## 🚀 Deploy
-
-### Vercel (Recomendado)
+- O projeto usa Prisma com Postgres. O `schema.prisma` está em `prisma/schema.prisma`.
+- Comandos úteis:
 
 ```bash
-npm i -g vercel
-vercel
+npx prisma generate      # gera o client
+npx prisma migrate dev   # cria/aplica migrations locais
+npx prisma db push       # sincroniza schema sem criar migration
+npx prisma studio        # abre Prisma Studio
 ```
 
-### Docker
+Se estiver usando um banco remoto, atualize `DATABASE_URL` apropriadamente.
+
+## Integrações
+
+Stripe
+- Configure `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLIC_KEY` e `STRIPE_SECRET_WEBHOOK_KEY`.
+- Para testar webhooks localmente, use o `stripe-cli` e copie o secret para `STRIPE_SECRET_WEBHOOK_KEY`.
+
+Cloudinary
+- Configure `CLOUDINARY_NAME`, `CLOUDINARY_API_KEY` e `CLOUDINARY_API_SECRET` para permitir upload de imagens em `/api/image/upload`.
+
+Auth (NextAuth)
+- `AUTH_GITHUB_ID` e `AUTH_GITHUB_SECRET` são exemplos. Ajuste provedores conforme necessário.
+
+## Deploy
+
+Vercel (recomendado)
+
+- Crie o projeto no Vercel e adicione as variáveis de ambiente no painel (use os mesmos nomes do `.env.example`).
+- Configure o domínio e a URL de produção (`VERCEL_URL` pode ser definida automaticamente pelo Vercel).
+
+Docker
 
 ```bash
 docker build -t odontopro .
-docker run -p 3000:3000 odontopro
+docker run -p 3000:3000 -e DATABASE_URL="<sua_url>" odontopro
 ```
 
-## 📄 Scripts Disponíveis
+## Scripts disponíveis
 
 ```bash
-npm run dev          # Servidor de desenvolvimento
-npm run build        # Build de produção
-npm run start        # Servidor de produção
-npm run lint         # Verificar código
-npm run lint:fix     # Corrigir problemas automaticamente
+npm run dev        # desenvolvimento
+npm run build      # build produção
+npm run start      # iniciar build
+npm run lint       # lint
+npm run lint:fix   # lint fix
 ```
 
-## 🤝 Contribuição
+## Contribuição
 
-Contribuições são sempre bem-vindas! Para contribuir:
+Contribuições e issues são bem-vindas. Siga o fluxo padrão de PRs:
 
-1. Faça um Fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
+1. Fork
+2. Branch com feature
+3. Commit e push
+4. Abra um PR descrevendo as mudanças
 
-## 📋 Roadmap
+## Licença
 
-- [ ] Sistema de autenticação completo
-- [ ] CRUD de pacientes
-- [ ] Agendamento de consultas
-- [ ] Dashboard com métricas
-- [ ] Notificações em tempo real
-- [ ] Integração com WhatsApp
-- [ ] Relatórios financeiros
-- [ ] App mobile (React Native)
+MIT
 
-## 📝 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
-## 👨‍💻 Autor
-
-**Valdeilson Lima**
+## Contato
 
 - GitHub: [@Valdeilson-lima](https://github.com/Valdeilson-lima)
-- LinkedIn: [Valdeilson Lima](https://linkedin.com/in/valdeilson-lima)
 
 ---
 
-<div align="center">
-  <p>Feito com ❤️ e ☕ por <strong>Valdeilson Lima</strong></p>
-  <p>🦷 <strong>OdontoPRO</strong> - Seu sorriso, nossa prioridade!</p>
-</div>
+Feito com ❤️ por Valdeilson Lima
