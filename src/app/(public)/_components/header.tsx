@@ -145,16 +145,6 @@ export function Header() {
                   <MobileNavLinks />
                 </nav>
               </div>
-
-              {/* Footer do Sheet */}
-              <div className="p-6 border-t border-gray-100">
-                <Button
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Agendar Consulta
-                </Button>
-              </div>
             </div>
           </SheetContent>
         </Sheet>
