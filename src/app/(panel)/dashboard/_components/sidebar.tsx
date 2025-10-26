@@ -30,6 +30,9 @@ import logoImg from "../../../../../public/logo-odonto.png";
 export function SidebarDashboard({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  // controla se o menu mobile (Sheet) está aberto — quando aberto, forçamos
+  // que as labels apareçam dentro do menu mobile
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   return (
     <div className="flex min-h-screen w-full">
@@ -153,10 +156,14 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }) {
         })}
       >
         <header className="md:hidden flex items-center justify-between p-4 md:px-6 h-14 z-10 border-b bg-white sticky top-0">
-          <Sheet>
+          <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <div className="flex items-center gap-4">
               <SheetTrigger asChild>
-                <Button variant="outline" className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+                {/* Não alteramos o estado de colapso desktop aqui. O Button
+                    apenas abre o Sheet (via SheetTrigger) para evitar que o
+                    estado `isOpen` (desktop) seja alternado quando o usuário
+                    abre o menu mobile. */}
+                <Button variant="outline" className="md:hidden">
                   <List className="w-5 h-5" />
                 </Button>
               </SheetTrigger>
@@ -179,7 +186,8 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }) {
                   label="Agedamentos"
                   icon={<CalendarCheck2 className="w-6 h-6" />}
                   pathname={pathname}
-                  isOpen={isOpen}
+                  // se o sheet estiver aberto, forçamos isOpen=false (labels visíveis)
+                  isOpen={isOpen && !sheetOpen}
                 />
 
                 <SidebarLink
@@ -187,7 +195,7 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }) {
                   label="Serviços"
                   icon={<Folder className="w-6 h-6" />}
                   pathname={pathname}
-                  isOpen={isOpen}
+                  isOpen={isOpen && !sheetOpen}
                 />
 
                 <SidebarLink
@@ -195,7 +203,7 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }) {
                   label="Meu Perfil"
                   icon={<Settings className="w-6 h-6" />}
                   pathname={pathname}
-                  isOpen={isOpen}
+                  isOpen={isOpen && !sheetOpen}
                 />
 
                 <SidebarLink
@@ -203,7 +211,7 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }) {
                   label="Meus Planos"
                   icon={<Banknote className="w-6 h-6" />}
                   pathname={pathname}
-                  isOpen={isOpen}
+                  isOpen={isOpen && !sheetOpen}
                 />
               </nav>
               {/* Conteúdo do menu lateral */}
