@@ -6,7 +6,19 @@ import { ResultPermissionProps } from "./canPermission";
 import { TRIAL_DAYS } from "./trial-dias";
 
 export async function checkSubscriptionExpired(session: Session): Promise<ResultPermissionProps> {
-    const trialEndDate = addDays(session?.user?.createdAt!, TRIAL_DAYS);
+    const userCreatedAt = session?.user?.createdAt;
+
+    if (!userCreatedAt) {
+        // If we don't have a creation date, deny by default
+        return {
+            hasPermission: false,
+            planId: "EXPIRED",
+            expired: true,
+            plan: null,
+        };
+    }
+
+    const trialEndDate = addDays(new Date(userCreatedAt), TRIAL_DAYS);
 
     if (isAfter(new Date(), trialEndDate)) {
         return {

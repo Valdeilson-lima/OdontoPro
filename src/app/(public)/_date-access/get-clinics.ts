@@ -15,7 +15,7 @@ export async function getClinics() {
     });
 
     return clinics;
-  } catch (error) {
+  } catch {
     return { error: "Erro ao buscar clínicas" };
   }
 }

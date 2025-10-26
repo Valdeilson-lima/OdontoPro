@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(blockedTimes);
 
 
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Erro ao buscar agendamentos" },
       { status: 500 }

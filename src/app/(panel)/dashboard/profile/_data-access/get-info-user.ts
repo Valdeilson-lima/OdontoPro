@@ -4,7 +4,6 @@ import { prisma } from "@/lib/prisma";
 
 interface getUserdataProps {
   userId: string;
-  // Define propriedades se necessário
 }
 
 export async function getUserdata({ userId }: getUserdataProps) {
@@ -25,8 +24,7 @@ export async function getUserdata({ userId }: getUserdataProps) {
       return null;
     }
     return user;
-  } catch (error) {
-    console.log(error);
+  } catch {
     return null;
   }
 }

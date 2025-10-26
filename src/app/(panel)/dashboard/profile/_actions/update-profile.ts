@@ -49,8 +49,7 @@ export async function updateProfile(formData: formSchema) {
     revalidatePath("/dashboard/profile");
 
     return { success: "Perfil atualizado com sucesso!" };
-  } catch (error) {
-    console.log(error);
+  } catch {
     return { error: "Erro ao atualizar perfil" };
   }
 }

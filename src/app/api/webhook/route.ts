@@ -15,8 +15,6 @@ export const POST = async (request: Request) => {
         return NextResponse.json({ error: "Missing Stripe signature" }, { status: 400 });
     }
 
-    console.log("Received Stripe signature:", sig);
-
     const event = stripe.webhooks.constructEvent(
         await request.text(),
         sig,
@@ -58,8 +56,7 @@ export const POST = async (request: Request) => {
             }
             break;
         default:
-            console.log(`Evento não tratado ${event.type}`);
-           
+            // evento não tratado: manter sem log em produção
     }
     revalidatePath(`/dashboard/plans`)
     return NextResponse.json({ received: true });

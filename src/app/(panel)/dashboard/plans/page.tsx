@@ -8,18 +8,20 @@ import { SubscriptionDetail } from "./_components/subscription-detail";
 export default async function Plans() {
   const session = await getSession();
 
-  if (!session?.user?.id) {
+  const userId = session?.user?.id;
+
+  if (!userId) {
     redirect("/login");
   }
 
-  const subscription = await getSubscription({ userId: session?.user?.id! });
+  const subscription = await getSubscription({ userId });
 
   return (
     <div>
       {subscription?.status !== "active" && <GridPlans />}
 
-      {subscription?.status === "active" && (
-        <SubscriptionDetail subscription={subscription!} />
+      {subscription?.status === "active" && subscription && (
+        <SubscriptionDetail subscription={subscription} />
       )}
     </div>
   );

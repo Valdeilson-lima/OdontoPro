@@ -6,21 +6,17 @@ import {
   Sheet,
   SheetContent,
   SheetDescription,
-  SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
   Collapsible,
   CollapsibleContent,
-  CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 import {
   Banknote,
   CalendarCheck2,
-  ChevronLeft,
-  ChevronRight,
   ChevronsLeft,
   ChevronsRight,
   Folder,

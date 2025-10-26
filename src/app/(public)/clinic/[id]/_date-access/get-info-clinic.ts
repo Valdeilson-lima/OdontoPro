@@ -26,7 +26,7 @@ export async function getInfoClinic({ userId }: { userId: string }) {
     }
 
     return user;
-  } catch (error) {
+  } catch {
     return null;
   }
 }

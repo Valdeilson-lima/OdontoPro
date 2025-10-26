@@ -19,11 +19,15 @@ export default async function Dashboard() {
   if (!session) {
     redirect("/");
   }
+  const userId = session.user?.id;
 
-  const subscription = await checkSubscription(session.user?.id!);
+  if (!userId) {
+    redirect("/");
+  }
 
-  
-  const metrics = await getDashboardMetrics({ userId: session.user?.id! });
+  const subscription = await checkSubscription(userId);
+
+  const metrics = await getDashboardMetrics({ userId });
 
   return (
     <main>
@@ -35,13 +39,13 @@ export default async function Dashboard() {
         />
       </div>
       <div className="space-x-2 flex items-center justify-end">
-        <Link href={`/clinic/${session.user?.id}`} target="_blank">
+  <Link href={`/clinic/${userId}`} target="_blank">
           <Button className="bg-green-600 hover:bg-green-700 text-white cursor-pointer flex-1 md:flex[0]">
             <Calendar className="mr-2 h-4 w-4" />
             <span>Agendar Consulta</span>
           </Button>
         </Link>
-        <ButtonCopyLink userId={session.user?.id!} />
+  <ButtonCopyLink userId={userId} />
       </div>
 
       {subscription?.subscriptionStatus === "EXPIRED" && (
@@ -62,8 +66,8 @@ export default async function Dashboard() {
 
       {subscription?.subscriptionStatus !== "EXPIRED" && (
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
-          <Appointments userId={session.user?.id!} />
-          <Reminders userId={session.user?.id!} />
+          <Appointments userId={userId} />
+          <Reminders userId={userId} />
         </section>
       )}
     </main>

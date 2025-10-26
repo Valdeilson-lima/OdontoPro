@@ -124,7 +124,7 @@ export function DialogService({
     // Remove tudo que não é número
     value = value.replace(/\D/g, "");
     // Converte para centavos
-    let floatValue = (parseInt(value, 10) || 0) / 100;
+    const floatValue = (parseInt(value, 10) || 0) / 100;
     // Formata para BRL
     const formatted = floatValue.toLocaleString("pt-BR", {
       style: "currency",

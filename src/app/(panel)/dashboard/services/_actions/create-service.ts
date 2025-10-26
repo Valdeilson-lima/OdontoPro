@@ -46,11 +46,10 @@ export async function createNewService(formData: FormSchemaType) {
         return {
             data: service,
         };
-    } catch (error) {
-        console.log(error);
+    } catch {
         return {
             error: "Erro ao criar serviço",
         };
-        
+
     }
 }

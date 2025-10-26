@@ -2,10 +2,9 @@
 import { useState, useCallback, useEffect } from "react";
 import Image from "next/image";
 import imgTest from "../../../../../../public/foto1.png";
-import { Divide, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { Prisma } from "@/generated/prisma/wasm";
 import {
-  apointmentFormSchema,
   AppointmentFormData,
   useAppointmentForm,
 } from "./clinic-form";

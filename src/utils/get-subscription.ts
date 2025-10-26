@@ -13,7 +13,6 @@ export async function getSubscription({ userId }: { userId: string }) {
         userId: userId,
       }
     });
-    console.log("Assinatura encontrada:", subscription);
     return subscription;
  } catch (error) {
     console.error("Erro ao buscar assinatura:", error);

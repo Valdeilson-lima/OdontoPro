@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/lib/auth";
-import { getPlans, PlanDetailInfo } from "./get-plans";
+import { PlanDetailInfo } from "./get-plans";
 import { prisma } from "@/lib/prisma";
 import { canCreateService } from "./canCreateService";
 

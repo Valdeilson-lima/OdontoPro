@@ -11,8 +11,6 @@ export async function ServicesContent({ userId }: ServicesContentProps) {
   const services = await getAllServices({ userId: userId });
   const permission = await canPermission({ type: "service" });
 
-  console.log('permission services content', permission);
-
   return (
     <div>
       <ServicesListt

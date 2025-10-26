@@ -4,7 +4,6 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { stripe } from "@/utils/stripe";
 import { Plan } from "@/generated/prisma";
-import { url } from "inspector";
 
 interface CreateSubscriptionProps {
   type: Plan;
@@ -76,7 +75,7 @@ export async function createSubscription({ type }: CreateSubscriptionProps) {
     }
   } catch (error) {
     console.error("Erro ao criar a sessão de checkout:", error);
-    console.log(error);
+    // error logged and handled
     return {
       sessionId: "",
       error: "Falha ao criar pagamento.",

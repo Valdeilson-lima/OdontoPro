@@ -3,7 +3,7 @@ import Image from "next/image";
 import fotoImg from "../../../../public/foto1.png";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { Prisma, User } from "@/generated/prisma/wasm";
+import { Prisma } from "@/generated/prisma/wasm";
 import { PremiumBadge } from "./preminun-badge";
 
 type UserWitthSubscription = Prisma.UserGetPayload<{

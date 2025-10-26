@@ -1,11 +1,10 @@
 "use client";
 import { useState } from "react";
-import { ProfileFormData, userProfileForm } from "./profile-form";
+import { ProfileFormData, useUserProfileForm } from "./profile-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -29,8 +28,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import Image from "next/image";
-import imgtest from "../../../../../../public/foto1.png";
+// Image imports removed (unused)
 import { ArrowBigRight } from "lucide-react";
 import { updateProfile } from "../_actions/update-profile";
 import { toast } from "sonner";
@@ -74,7 +72,7 @@ export function ProfileContent({ user }: ProfileContentProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { update } = useSession();
 
-  const form = userProfileForm({
+  const form = useUserProfileForm({
     name: user.name,
     address: user.address,
     phone: user.phone,

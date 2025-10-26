@@ -8,8 +8,6 @@ export const revalidate = 120
 
 export default async function Home() {
   const clinicsResult = await getClinics();
-  console.log(clinicsResult);
-
   const clinics = Array.isArray(clinicsResult) ? clinicsResult : [];
 
   return (

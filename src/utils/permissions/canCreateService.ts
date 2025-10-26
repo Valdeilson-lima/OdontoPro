@@ -34,14 +34,13 @@ export async function canCreateService(subscription: Subscription | null, sessio
         const checkTestLimit = await checkSubscriptionExpired(session);
 
         return checkTestLimit
-    } catch (error) {
+    } catch {
         return {
             hasPermission: false,
             planId: "EXPIRED",
             expired: true,
             plan: null
         }
-
 
     }
 }

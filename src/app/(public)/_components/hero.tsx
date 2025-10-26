@@ -36,4 +36,4 @@ export function Hero() {
     </section>
   );
 }
-("");
+  // stray expression removed

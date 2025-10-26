@@ -21,7 +21,7 @@ const profileSchema = z.object({
 
 export type ProfileFormData = z.infer<typeof profileSchema>;
 
-export function userProfileForm({name, address, phone, status, timezone}: UseProfileFormProps) {
+export function useUserProfileForm({name, address, phone, status, timezone}: UseProfileFormProps) {
   return useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {

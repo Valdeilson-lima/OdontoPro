@@ -2,7 +2,7 @@
 
 
 import { prisma } from "../../lib/prisma";
-import { addDays, differenceInDays, isAfter, sub } from "date-fns";
+import { addDays, differenceInDays, isAfter } from "date-fns";
 import { TRIAL_DAYS } from "./trial-dias";
 
 

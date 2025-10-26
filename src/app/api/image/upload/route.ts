@@ -37,7 +37,7 @@ export async function POST(request: Request) {
   const buffer = Buffer.from(new Uint8Array(arrayBuffer));
 
   try {
-    const results: any = await new Promise((resolve, reject) => {
+    const results = await new Promise<unknown>((resolve, reject) => {
       cloudinary.uploader
         .upload_stream(
           {
@@ -61,11 +61,12 @@ export async function POST(request: Request) {
       { message: "File uploaded successfully", result: results },
       { status: 200 }
     );
-  } catch (error: any) {
-    console.error("Upload error:", error);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("Upload error:", message);
 
     return NextResponse.json(
-      { error: error?.message ?? "Upload failed" },
+      { error: message ?? "Upload failed" },
       { status: 500 }
     );
   }

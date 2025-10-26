@@ -25,7 +25,8 @@ export async function getAllServices({userId}: {userId: string | null}) {
             data: services
         }
         
-    } catch (error) {
+    } catch {
+        // Consider logging the error for debugging in development
         return {
             error: "Falha ao carregar os serviços.",
         };

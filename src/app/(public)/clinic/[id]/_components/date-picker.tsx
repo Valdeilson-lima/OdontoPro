@@ -22,7 +22,6 @@ export function DateTimePicker({
 
   function handleChange(date: Date | null) {
     if (date) {
-      console.log(date);
       setStartDate(date);
       onChange(date);
     }
